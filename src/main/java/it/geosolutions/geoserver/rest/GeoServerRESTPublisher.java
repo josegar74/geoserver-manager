@@ -29,14 +29,8 @@ import it.geosolutions.geoserver.rest.decoder.RESTCoverageStore;
 import it.geosolutions.geoserver.rest.decoder.RESTStructuredCoverageGranulesList;
 import it.geosolutions.geoserver.rest.decoder.RESTStyleList;
 import it.geosolutions.geoserver.rest.decoder.utils.NameLinkElem;
-import it.geosolutions.geoserver.rest.encoder.GSBackupEncoder;
-import it.geosolutions.geoserver.rest.encoder.GSLayerEncoder;
-import it.geosolutions.geoserver.rest.encoder.GSLayerGroupEncoder;
-import it.geosolutions.geoserver.rest.encoder.GSNamespaceEncoder;
-import it.geosolutions.geoserver.rest.encoder.GSPostGISDatastoreEncoder;
-import it.geosolutions.geoserver.rest.encoder.GSResourceEncoder;
+import it.geosolutions.geoserver.rest.encoder.*;
 import it.geosolutions.geoserver.rest.encoder.GSResourceEncoder.ProjectionPolicy;
-import it.geosolutions.geoserver.rest.encoder.GSWorkspaceEncoder;
 import it.geosolutions.geoserver.rest.encoder.coverage.GSCoverageEncoder;
 import it.geosolutions.geoserver.rest.encoder.feature.GSFeatureTypeEncoder;
 import it.geosolutions.geoserver.rest.manager.GeoServerRESTStructuredGridCoverageReaderManager;
@@ -243,6 +237,93 @@ public class GeoServerRESTPublisher {
         // This is really an alias to createNamespace, as GeoServer
         // will automatically create the associated workspace as well.
         return createNamespace(name, uri);
+    }
+
+    /**
+     * Enables the local workspaces settings for a workspace, with a default configuration.
+     *
+     * @param workspace The name of the workspace to update.
+     *
+     * @return <TT>true</TT> if the workspace was updated.
+     */
+    public boolean saveWorkspaceSettings(final String workspace) {
+        final String sUrl = restURL + "/rest/workspaces/" + workspace + "/settings.xml";
+        final GSWorkspaceSettingsEncoder wsenc = new GSWorkspaceSettingsEncoder(workspace);
+
+        final String wsxml = wsenc.toString();
+        final String result = HTTPUtils.putXml(sUrl, wsxml, gsuser, gspass);
+        return result != null;
+    }
+
+    /**
+     * Enables the local workspaces settings for a workspace, with a custom configuration.
+     *
+     * @param wsenc The workspace WMS settings configuration..
+     *
+     * @return <TT>true</TT> if the workspace was updated.
+     */
+    public boolean saveWorkspaceSettings(final GSWorkspaceSettingsEncoder wsenc) {
+        final String sUrl = restURL + "/rest/workspaces/" + wsenc.getWorkspace() + "/settings.xml";
+
+        final String wsxml = wsenc.toString();
+        final String result = HTTPUtils.putXml(sUrl, wsxml, gsuser, gspass);
+        return result != null;
+    }
+
+    /**
+     * Disables the local workspaces settings for a workspace.
+     *
+     * @param workspace The name of the workspace to update.
+     *
+     * @return <TT>true</TT> if the workspace was updated.
+     */
+    public boolean disableWorkspaceSettings(final String workspace) {
+        final String sUrl = restURL + "/rest/workspaces/" + workspace + "/settings.xml";
+
+        return HTTPUtils.delete(sUrl, gsuser, gspass);
+    }
+
+    /**
+     * Enables WMS service for a workspace, setting default configuration.
+     *
+     * @param workspace The name of the workspace to enable the WMS service.
+     *
+     * @return <TT>true</TT> if the WMS service is enabled for the workspace.
+     */
+    public boolean enableWorkspaceWMSService(final String workspace) {
+        final String sUrl = restURL + "/rest/services/wms/workspaces/" + workspace + "/settings.xml";
+        final GSWorkspaceWMSServiceEncoder wsenc  = new GSWorkspaceWMSServiceEncoder(workspace);
+
+        final String wsxml = wsenc.toString();
+        final String result = HTTPUtils.putXml(sUrl, wsxml, gsuser, gspass);
+        return result != null;
+    }
+
+    /**
+     * Enables WMS service for a workspace, setting custom configuration.
+     *
+     * @param wsenc The workspace WMS service configuration.
+     *
+     * @return <TT>true</TT> if the WMS service is enabled for the workspace.
+     */
+    public boolean enableWorkspaceWMSService(final GSWorkspaceWMSServiceEncoder wsenc) {
+        final String sUrl = restURL + "/rest/services/wms/workspaces/" + wsenc.getWorkspace() + "/settings.xml";
+
+        final String wsxml = wsenc.toString();
+        final String result = HTTPUtils.putXml(sUrl, wsxml, gsuser, gspass);
+        return result != null;
+    }
+
+    /**
+     * Disables WMS service for a workspace.
+     *
+     * @param workspace The name of the workspace to disable the WMS service.
+     * @return
+     */
+    public boolean disableWorkspaceWMSService(final String workspace) {
+        final String sUrl = restURL + "/rest/services/wms/workspaces/" + workspace + "/settings.xml";
+
+        return HTTPUtils.delete(sUrl, gsuser, gspass);
     }
 
     // ==========================================================================
