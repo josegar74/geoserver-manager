@@ -326,6 +326,37 @@ public class GeoServerRESTPublisher {
         return HTTPUtils.delete(sUrl, gsuser, gspass);
     }
 
+    /**
+     * Enables WFS service for a workspace, setting default configuration.
+     *
+     * @param workspace The name of the workspace to enable the WFS service.
+     *
+     * @return <TT>true</TT> if the WFS service is enabled for the workspace.
+     */
+    public boolean enableWorkspaceWFSService(final String workspace) {
+        final String sUrl = restURL + "/rest/services/wfs/workspaces/" + workspace + "/settings.xml";
+        final GSWorkspaceWFSServiceEncoder wsenc  = new GSWorkspaceWFSServiceEncoder(workspace);
+
+        final String wsxml = wsenc.toString();
+        final String result = HTTPUtils.putXml(sUrl, wsxml, gsuser, gspass);
+        return result != null;
+    }
+
+    /**
+     * Enables WFS service for a workspace, setting custom configuration.
+     *
+     * @param wsenc The workspace WFS service configuration.
+     *
+     * @return <TT>true</TT> if the WFS service is enabled for the workspace.
+     */
+    public boolean enableWorkspaceWFSSService(final GSWorkspaceWFSServiceEncoder wsenc) {
+        final String sUrl = restURL + "/rest/services/wfs/workspaces/" + wsenc.getWorkspace() + "/settings.xml";
+
+        final String wsxml = wsenc.toString();
+        final String result = HTTPUtils.putXml(sUrl, wsxml, gsuser, gspass);
+        return result != null;
+    }
+
     // ==========================================================================
     // === NAMESPACES
     // ==========================================================================

@@ -150,7 +150,16 @@ public class PropertyXMLEncoder extends XmlElement {
         return parent;
     }
 
-	// public void set(final String key, final String value) {
+    protected String getElemValue(String elemName) {
+        final Element el = ElementUtils.contains(getRoot(), elemName);
+        if (el != null) {
+            return el.getTextTrim();
+        } else {
+            return null;
+        }
+    }
+
+    // public void set(final String key, final String value) {
 	// if (key != null && value != null) {
 	// set(getRoot(), key, value);
 	// }

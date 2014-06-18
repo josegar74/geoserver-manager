@@ -41,19 +41,19 @@ public class GSWorkspaceSettingsEncoder extends PropertyXMLEncoder {
     }
 
     public void setCharset(String charset){
-        set("charset",charset);
+        set(CHARSET,charset);
     }
 
     public void setNumDecimals(int numDecimals){
-        set("numDecimals",numDecimals+"");
+        set(NUM_DECIMALS,numDecimals+"");
     }
 
     public void setVerbose(boolean verbose){
-        set("verbose",Boolean.toString(verbose));
+        set(VERBOSE,Boolean.toString(verbose));
     }
 
     public void setVerboseExceptions(boolean verboseExceptions){
-        set("verboseExceptions",Boolean.toString(verboseExceptions));
+        set(VERBOSE_EXCEPTIONS,Boolean.toString(verboseExceptions));
     }
 
     public void setLocalWorkspaceIncludesPrefix(boolean localWorkspaceIncludesPrefix){
@@ -65,65 +65,30 @@ public class GSWorkspaceSettingsEncoder extends PropertyXMLEncoder {
     }
 
     public String getCharset(){
-        final Element el = ElementUtils.contains(getRoot(), CHARSET);
-        if (el != null)
-        {
-            return el.getTextTrim();
-        }
-        else
-        {
-            return null;
-        }
+        return getElemValue(CHARSET);
     }
 
     public int getNumDecimals(){
-        final Element el = ElementUtils.contains(getRoot(), NUM_DECIMALS);
-        if (el != null)
-        {
-            return Integer.parseInt(el.getTextTrim());
-        }
-        else
-        {
-            return 0;
-        }
+        String val = getElemValue(NUM_DECIMALS);
+
+        return (val!=null)?Integer.parseInt(val):0;
     }
 
-    public boolean getVerbose(boolean verbose){
-        final Element el = ElementUtils.contains(getRoot(), VERBOSE);
-        if (el != null)
-        {
-            return Boolean.parseBoolean(el.getTextTrim());
-        }
-        else
-        {
-            return false;
-        }
+    public boolean getVerbose(){
+        String val = getElemValue(VERBOSE);
+
+        return (val!=null)?Boolean.parseBoolean(val):false;
     }
 
-    public boolean getVerboseExceptions(boolean verboseExceptions){
-        final Element el = ElementUtils.contains(getRoot(), VERBOSE_EXCEPTIONS);
-        if (el != null)
-        {
-            return Boolean.parseBoolean(el.getTextTrim());
-        }
-        else
-        {
-            return false;
-        }
+    public boolean getVerboseExceptions(){
+        String val = getElemValue(VERBOSE_EXCEPTIONS);
+
+        return (val!=null)?Boolean.parseBoolean(val):false;
     }
 
-    public boolean getLocalWorkspaceIncludesPrefix(boolean localWorkspaceIncludesPrefix){
-        final Element el = ElementUtils.contains(getRoot(), LOCAL_WORKSPACE_INCLUDES_PREFIX);
-        if (el != null)
-        {
-            return Boolean.parseBoolean(el.getTextTrim());
-        }
-        else
-        {
-            return false;
-        }
+    public boolean getLocalWorkspaceIncludesPrefix(){
+        String val = getElemValue(LOCAL_WORKSPACE_INCLUDES_PREFIX);
+
+        return (val!=null)?Boolean.parseBoolean(val):false;
     }
-
-
-
 }
