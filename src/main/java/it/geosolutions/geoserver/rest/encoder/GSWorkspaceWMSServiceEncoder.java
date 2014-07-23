@@ -2,6 +2,7 @@ package it.geosolutions.geoserver.rest.encoder;
 
 import it.geosolutions.geoserver.rest.encoder.utils.ElementUtils;
 import it.geosolutions.geoserver.rest.encoder.utils.PropertyXMLEncoder;
+
 import org.jdom.Element;
 
 /**
@@ -29,6 +30,8 @@ public class GSWorkspaceWMSServiceEncoder extends PropertyXMLEncoder {
     private final static String MAX_RENDERING_ERRORS = "maxRenderingErrors";
 
     private String workspace;
+    private Element keywords;
+    private Element srs;
 
     public GSWorkspaceWMSServiceEncoder(String workspace) {
         super(WMS);
@@ -60,6 +63,12 @@ public class GSWorkspaceWMSServiceEncoder extends PropertyXMLEncoder {
 
         addContent(watermarkElem);
 
+        keywords = elem("keywords");
+        addContent(keywords);
+        
+        srs = elem("srs");
+        addContent(srs);
+
         add(INTERPOLATION, "Nearest");
         add(MAX_BUFFER, "0");
         add(MAX_REQUEST_MEMORY, "0");
@@ -72,6 +81,24 @@ public class GSWorkspaceWMSServiceEncoder extends PropertyXMLEncoder {
         add(ACCESS_CONSTRAINTS, "");
         add(FEES, "");
     }
+
+    /**
+     * Example of usage: addKeyword("water", "en")
+     * @param keyword
+     * @param isolanguage
+     */
+    public void addKeyword(String keyword, String isolanguage) {
+    	keywords.addContent(elem("string", keyword + "\\@language=" + isolanguage + "\\;"));
+    }
+    
+    /**
+     * Example of usage: addSRS("4326")
+     * @param srs
+     */
+    public void addSRS(String srs) {
+    	this.srs.addContent(elem("string", srs));
+    }
+    
 
     public void setTitle(String title){
         set(TITLE, title);
