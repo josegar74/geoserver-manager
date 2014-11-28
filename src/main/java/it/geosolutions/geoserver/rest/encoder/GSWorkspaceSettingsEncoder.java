@@ -20,6 +20,7 @@ public class GSWorkspaceSettingsEncoder extends PropertyXMLEncoder {
     private final static String LOCAL_WORKSPACE_INCLUDES_PREFIX = "localWorkspaceIncludesPrefix";
 
     private String workspace;
+    private Element contactElem;
 
     public GSWorkspaceSettingsEncoder(String workspace) {
         super(SETTINGS);
@@ -30,7 +31,7 @@ public class GSWorkspaceSettingsEncoder extends PropertyXMLEncoder {
         addContent(workspaceElem);
 
         // TODO: Add more contact fields
-        Element contactElem = elem("contact", elem("id", "contact"));
+        contactElem = elem("contact", elem("id", "contact"));
         addContent(contactElem);
 
         add(CHARSET, "UTF-8");
@@ -38,6 +39,14 @@ public class GSWorkspaceSettingsEncoder extends PropertyXMLEncoder {
         add(VERBOSE, "true");
         add(VERBOSE_EXCEPTIONS, "false");
         add(LOCAL_WORKSPACE_INCLUDES_PREFIX, "false");
+    }
+    
+    public void setContactEmail(String email) {
+    	contactElem.addContent(elem("contactEmail", email));
+    }
+    
+    public void setContactPerson(String person) {
+    	contactElem.addContent(elem("contactPerson", person));
     }
 
     public void setCharset(String charset){
