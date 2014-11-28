@@ -2,6 +2,7 @@ package it.geosolutions.geoserver.rest.encoder;
 
 import it.geosolutions.geoserver.rest.encoder.utils.ElementUtils;
 import it.geosolutions.geoserver.rest.encoder.utils.PropertyXMLEncoder;
+
 import org.jdom.Element;
 
 /**
@@ -31,6 +32,7 @@ public class GSWorkspaceWFSServiceEncoder extends PropertyXMLEncoder {
 
 
     private String workspace;
+    private Element keywords;
 
     public GSWorkspaceWFSServiceEncoder(String workspace) {
         super(WFS);
@@ -68,6 +70,8 @@ public class GSWorkspaceWFSServiceEncoder extends PropertyXMLEncoder {
 
         addContent(gmlElem);
 
+        keywords = elem("keywords");
+        addContent(keywords);
 
         add(SERVICE_LEVEL, "COMPLETE");
         add(MAX_FEATURES, "1000000");
@@ -84,6 +88,16 @@ public class GSWorkspaceWFSServiceEncoder extends PropertyXMLEncoder {
         add(ONLINE_RESOURCE, "");
     }
 
+
+    /**
+     * Example of usage: addKeyword("water", "en")
+     * @param keyword
+     * @param isolanguage
+     */
+    public void addKeyword(String keyword, String isolanguage) {
+    	keywords.addContent(elem("string", keyword + "\\@language=" + isolanguage + "\\;"));
+    }
+    
     public void setTitle(String title){
         set(TITLE, title);
     }
